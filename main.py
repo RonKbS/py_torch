@@ -20,3 +20,15 @@ bias = torch.randn((1,1))
 
 y = activation(torch.sum(features * weights) + bias)
 print(y)
+
+new_weights = weights.view(5, 1)
+
+z = activation(torch.mm(features, new_weights) + bias)
+print(z)
+# ||
+# ||
+# ||
+# ||
+# ||
+z = activation(torch.mm(features, weights.view(5, 1)) + bias)
+print(z)
