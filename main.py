@@ -1,0 +1,22 @@
+import torch
+
+def activation(x):
+    """
+    Sigmoid activation function
+
+    Arguments
+    --------
+    x: torch.Tensor
+    """
+    return 1/(1+torch.exp(-x))
+
+torch.manual_seed(7) # generate fake date
+
+features = torch.randn((1,5))# input data for the network
+
+weights = torch.randn_like(features)
+
+bias = torch.randn((1,1))
+
+y = activation(torch.sum(features * weights) + bias)
+print(y)
