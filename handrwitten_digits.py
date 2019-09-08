@@ -4,7 +4,7 @@
 import numpy as np
 import torch
 from torchvision import datasets, transforms
-# import helper
+import helper
 
 import matplotlib.pyplot as plt
 # Define a transform to normalize the data
@@ -154,7 +154,7 @@ class Network(nn.Module):
         return x
 
 model = Network()
-print(model)
+# print(model)
 # print(model.fc1.weight)
 # print(model.fc1.bias)
 '''
@@ -163,3 +163,10 @@ model.fc1.weight.data.normal_(std=0.01)
 print(model.fc1.weight)
 print(model.fc1.bias)
 '''
+
+images.resize_(64, 1, 784)
+img_idx = 0
+ps = model.forward(images[img_idx,:])
+
+img = images[img_idx]
+helper.view_classify(img.view(1, 28, 28), ps)
