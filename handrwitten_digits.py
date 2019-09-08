@@ -153,7 +153,7 @@ class Network(nn.Module):
 
         return x
 
-model = Network()
+# model = Network()
 # print(model)
 # print(model.fc1.weight)
 # print(model.fc1.bias)
@@ -164,9 +164,44 @@ print(model.fc1.weight)
 print(model.fc1.bias)
 '''
 
+'''
 images.resize_(64, 1, 784)
 img_idx = 0
 ps = model.forward(images[img_idx,:])
 
 img = images[img_idx]
 helper.view_classify(img.view(1, 28, 28), ps)
+'''
+
+# build network by passing tensor sequentially through operations using nn.Sequential
+input_size = 784
+hidden_sizes = [128, 64]
+output_size = 10
+
+model = nn.Sequential(
+    nn.Linear(input_size, hidden_sizes[0]),
+    nn.ReLU(),
+    nn.Linear(hidden_sizes[0], hidden_sizes[1]),
+    nn.ReLU(),
+    nn.Linear(hidden_sizes[1], output_size),
+    nn.Softmax(dim=1)
+)
+
+# print(model)
+# images.resize_(images.shape[0], 1, 784)
+# ps = model.forward(images[0,:])
+# helper.view_classify(images[0].view(1,28,28), ps)
+
+# OrderedDict can also be passed to name individual layers and operations,
+# rather than using incremental integers
+from collections import OrderedDict
+model = nn.Sequential(OrderedDict([
+                      ('fc1', nn.Linear(input_size, hidden_sizes[0])),
+                      ('relu1', nn.ReLU()),
+                      ('fc2', nn.Linear(hidden_sizes[0], hidden_sizes[1])),
+                      ('relu2', nn.ReLU()),
+                      ('output', nn.Linear(hidden_sizes[1], output_size)),
+                      ('softmax', nn.Softmax(dim=1))]))
+print(model)
+print(model[0])
+print(model.fc1)
