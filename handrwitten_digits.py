@@ -104,6 +104,7 @@ print(model)
 #   .this is the most common wat
 import torch.nn.functional as F
 
+'''
 class Network(nn.Module):
     def __init__(self):
         super().__init__()
@@ -121,8 +122,36 @@ class Network(nn.Module):
 model = Network()
 print(model)
 '''
+
+'''
     - Other functions can be used as activation fns.
     - Only requirement is that to appx non-linear fn, 
         atn-fns must be  non-linear.
     - Other activation fns, Tanh, ReLU (rectified linear unit)
     - ReLU us used almost exclusively as atn-fn for hidden layers
+'''
+
+# Create a network with 784 input units, a hidden layer with 128 units and a ReLU activation,
+# then a hidden layer with 64 units and a ReLU activation, and finally an output layer with a softmax activation
+
+# good practice to name layers by type of nework, fc to represent fully-connected layer for example.
+
+class Network(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.fc1 = nn.Linear(784, 128)
+        self.fc2 = nn.Linear(128, 64)
+        self.fc3 = nn.Linear(64, 10)
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = F.relu(x)
+        x = self.fc3(x)
+        x = F.softmax(x, dim=1)
+
+        return x
+
+model = Network()
+print(model)
