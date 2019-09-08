@@ -27,7 +27,7 @@ images, labels = dataiter.next()
 
 # build a simple network for this dataset using weight matrices and matrix
 
-
+'''
 ## Solution
 def activation(x):
     return 1/(1+torch.exp(-x))
@@ -58,3 +58,71 @@ print(probabilities.shape)
 
 # does it sum to 1
 print(probabilities)
+'''
+
+
+from torch import nn
+
+# use nn to build network
+'''
+class Network(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        # Inputs to hidden layer linear transformation
+        # ~~this line creates module for linear transformation, xW+b, with 784 inputs
+        #   and 256 outputs, assigning it to self.hidden
+        # module automatically creates weight and bias tensors to be used in ~forward~
+        #   method. They can be accessed once network is created with ~net.hidden.weight~
+        #   and ~net.hidden.bias~
+        self.hidden = nn.Linear(784, 256)
+        
+        # Output layer, 10 units - one for each digit
+        # ~~same for this line as above
+        self.output = nn.Linear(256, 10)
+
+        # Define sigmoid activation and softmax output
+        # ~~setting dim=1 calculates softmax across columns, =0 across rows
+        self.sigmoid = nn.Sigmoid()
+        self.softmax = nn.Softmax(dim=1)
+
+
+    def forward(self, x):
+        # Pass input tensor through each of the operations
+        x = self.hidden(x)
+        x = self.sigmoid(x)
+        x = self.output(x)
+        x = self.softmax(x)
+
+        return x
+
+model = Network()
+print(model)
+'''
+
+# ~~or use more concise definition with torch.nn.functional module imported as F
+#   .this is the most common wat
+import torch.nn.functional as F
+
+class Network(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.hidden = nn.Linear(784, 256)
+        self.output = nn.Linear(256, 10)
+
+    def forward(self, x):
+        x = F.sigmoid(self.hidden(x))
+        x = F.softmax(self.output(x), dim=1)
+
+        return x
+
+
+model = Network()
+print(model)
+'''
+    - Other functions can be used as activation fns.
+    - Only requirement is that to appx non-linear fn, 
+        atn-fns must be  non-linear.
+    - Other activation fns, Tanh, ReLU (rectified linear unit)
+    - ReLU us used almost exclusively as atn-fn for hidden layers
