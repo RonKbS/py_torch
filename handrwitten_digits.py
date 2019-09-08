@@ -144,14 +144,22 @@ class Network(nn.Module):
         self.fc3 = nn.Linear(64, 10)
 
     def forward(self, x):
-        x = self.fc1(x)
-        x = F.relu(x)
-        x = self.fc2(x)
-        x = F.relu(x)
-        x = self.fc3(x)
-        x = F.softmax(x, dim=1)
+        # x = self.fc1(x)
+        x = F.relu(self.fc1(x))
+        # x = self.fc2(x)
+        x = F.relu(self.fc2(x))
+        # x = self.fc3(x)
+        x = F.softmax(self.fc3(x), dim=1)
 
         return x
 
 model = Network()
 print(model)
+# print(model.fc1.weight)
+# print(model.fc1.bias)
+'''
+model.fc1.bias.data.fill_(0)
+model.fc1.weight.data.normal_(std=0.01)
+print(model.fc1.weight)
+print(model.fc1.bias)
+'''
