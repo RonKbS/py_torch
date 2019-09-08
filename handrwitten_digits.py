@@ -45,4 +45,16 @@ b2 = torch.randn(10)
 h = activation(torch.mm(inputs, w1) + b1)
 
 out = torch.mm(h, w2) + b2
-print(len(out))
+# print(len(out))
+
+
+def softmax(x):
+    return torch.exp(x)/torch.sum(torch.exp(x), dim=1).view(-1, 1)
+
+probabilities = softmax(out)
+
+# should have the right shape
+print(probabilities.shape)
+
+# does it sum to 1
+print(probabilities)
