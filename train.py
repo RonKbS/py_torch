@@ -85,6 +85,7 @@ from torch import optim
 # optimizers require parameters to optimize and a learning-rate
 optimizer = optim.SGD(model.parameters(), lr=0.01)
 
+'''
 print("Initial weights - ", model[0].weight)
 
 images, labels = next(iter(trainloader))
@@ -94,6 +95,7 @@ images.resize_(64, 784)
     # with the same parameters are done
 optimizer.zero_grad()
 
+
 # Forward pass then backward pass, then update of the weights
 output = model(images)
 loss = criterion(output, labels)
@@ -102,3 +104,35 @@ print("Gradient - ", model[0].weight.grad)
 
 optimizer.step()
 print("Updated weights - ", model[0].weight)
+'''
+
+epochs = 5
+for e in range(epochs):
+    running_loss = 0
+    for images, labels in trainloader:
+        # flatten MNIST images into a 784 long vector
+        images = images.view(images.shape[0], -1)
+
+        optimizer.zero_grad()
+
+        output = model(images)
+
+        loss = criterion(output, labels)
+        loss.backward()
+        optimizer.step()
+
+        running_loss += loss.item()
+    else:
+        print(f"Training loss : {running_loss/len(trainloader)}")
+
+images, labels = next(iter(trainloader))
+img = images[0].view(1, 784)
+# Turn off gradients to speed up this part
+with torch.no_grad():
+    logps = model(img)
+
+# ouptut of network is log-probability, so take exponential for probabilities
+ps = torch.exp(logps)
+
+import helper
+helper.view_classify(img.view(1, 28, 28), ps)
