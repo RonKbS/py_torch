@@ -128,7 +128,7 @@ print(model)
     - Only requirement is that to appx non-linear fn, 
         atn-fns must be  non-linear.
     - Other activation fns, Tanh, ReLU (rectified linear unit)
-    - ReLU us used almost exclusively as atn-fn for hidden layers
+    - ReLU is used almost exclusively as atn-fn for hidden layers
 '''
 
 # Create a network with 784 input units, a hidden layer with 128 units and a ReLU activation,
