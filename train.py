@@ -71,4 +71,10 @@ logps = model(images)
 # calculate loss with logps and labels
 loss = criterion(logps, labels)
 
-print(loss)
+# print(loss)
+
+print("Before backward pass : \n", model[0].weight.grad)
+
+loss.backward()
+
+print("After backward pass: \n", model[0].weight.grad)
