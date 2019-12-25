@@ -17,6 +17,8 @@ trainset = datasets.MNIST(
 )
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
 
+
+'''
 # build feed-forward network
 model = nn.Sequential(
     nn.Linear(784, 128),
@@ -38,5 +40,35 @@ images = images.view(images.shape[0], -1)
 logits = model(images)
 # Calculate the loss with the logits and labels
 loss = criterion(logits, labels)
+
+print(loss)
+'''
+
+
+# ~build model with log-softmax output using nn.LogSoftmax
+    # or F.log_softmax. Actual probabilities then gotten with
+    # torch.exp(output). For this case, negative-log-likelihood-loss
+    # nn.NLLLoss is more appropriate
+
+# model returnning log-softmax as output
+model = nn.Sequential(
+    nn.Linear(784, 128),
+    nn.ReLU(),
+    # removing the layer below returns a 2.3299 loss, much closer to that shown
+    nn.Linear(128, 64),
+    nn.ReLU(),
+    nn.Linear(64, 10),
+    nn.LogSoftmax(dim=1)
+)
+
+criterion = nn.NLLLoss()
+images, labels = next(iter(trainloader))
+images = images.view(images.shape[0], -1)
+
+# forward-pass to get log-probabilities
+logps = model(images)
+
+# calculate loss with logps and labels
+loss = criterion(logps, labels)
 
 print(loss)
