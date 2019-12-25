@@ -13,8 +13,8 @@ trainset = datasets.FashionMNIST("~/.pytorch/F_MNIST_data", download=True, train
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
 
 # download and load test data
-testset = datasets.FashionMNIST("~/.pytorch/F_MNIST_data", download=True, train=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
+testset = datasets.FashionMNIST("~/.pytorch/F_MNIST_data", download=True, train=False, transform=transform)
+testloader = torch.utils.data.DataLoader(testset, batch_size=64, shuffle=True)
 
 # image, label = next(iter(trainloader))
 # helper.imshow(image[0,:])
@@ -57,3 +57,10 @@ for e in range(epochs):
         running_loss += loss.item()
     else:
         print(f"Training loss: {running_loss/len(trainloader)}")
+
+dataiter = iter(testloader)
+images, labels = dataiter.next()
+img = images[1]
+
+ps = torch.exp(model(img))
+helper.view_classify(img, ps, version="Fashion")
