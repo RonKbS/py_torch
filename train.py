@@ -62,6 +62,7 @@ model = nn.Sequential(
 )
 
 criterion = nn.NLLLoss()
+'''
 images, labels = next(iter(trainloader))
 images = images.view(images.shape[0], -1)
 
@@ -78,3 +79,26 @@ print("Before backward pass : \n", model[0].weight.grad)
 loss.backward()
 
 print("After backward pass: \n", model[0].weight.grad)
+'''
+
+from torch import optim
+# optimizers require parameters to optimize and a learning-rate
+optimizer = optim.SGD(model.parameters(), lr=0.01)
+
+print("Initial weights - ", model[0].weight)
+
+images, labels = next(iter(trainloader))
+images.resize_(64, 784)
+
+# clear grads coz they are accumulated as multiple backward passes
+    # with the same parameters are done
+optimizer.zero_grad()
+
+# Forward pass then backward pass, then update of the weights
+output = model(images)
+loss = criterion(output, labels)
+loss.backward()
+print("Gradient - ", model[0].weight.grad)
+
+optimizer.step()
+print("Updated weights - ", model[0].weight)
